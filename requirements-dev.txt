@@ -1,0 +1,5 @@
+# Host tools (the ESP-IDF itself is installed separately, v5.5.x).
+mpy-cross==1.29.0.post2   # must match the MicroPython submodule (v1.29.0)
+mpremote>=1.29            # REPL / file access on the board
+Pillow>=10                # tools/make_fonts.py, tools/make_mockup previews, host test previews
+mypy>=1.10                # scripts/typecheck.py (installs micropython-esp32-stubs into .typings/)

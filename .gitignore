@@ -1,0 +1,31 @@
+# --- Build output -----------------------------------------------------------
+/build/
+
+# --- Downloaded / installed (re-creatable) ----------------------------------
+# Waveshare example repo, reference only (not needed to build):
+#   git clone https://github.com/waveshareteam/ESP32-C6-ePaper-1.54 third_party/waveshare
+/third_party/waveshare/
+# MicroPython type stubs, installed by scripts/typecheck.py
+/.typings/
+# Python virtual environments
+.venv/
+venv/
+
+# --- Generated at test / tool time ------------------------------------------
+/tests/host/out/
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.pytest_cache/
+
+# --- Editors / OS -----------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# --- Secrets ----------------------------------------------------------------
+# Wi-Fi credentials are written to the board by scripts/deploy.py, never committed.
+secrets.py

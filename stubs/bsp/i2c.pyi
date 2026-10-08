@@ -1,0 +1,9 @@
+"""Access to the board's shared I2C bus."""
+
+from typing import List
+
+from _typeshed import ReadableBuffer
+
+def scan() -> List[int]: ...
+def readfrom_mem(addr: int, reg: int, n: int) -> bytes: ...
+def writeto_mem(addr: int, reg: int, buf: ReadableBuffer) -> None: ...

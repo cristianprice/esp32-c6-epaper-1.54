@@ -1,0 +1,15 @@
+{
+    "deploy": [],
+    "docs": "",
+    "features": [
+        "WiFi",
+        "RTC",
+        "microSD"
+    ],
+    "images": [],
+    "mcu": "esp32c6",
+    "product": "ESP32-C6-ePaper-1.54",
+    "thumbnail": "",
+    "url": "https://docs.waveshare.com/ESP32-C6-ePaper-1.54",
+    "vendor": "Waveshare"
+}

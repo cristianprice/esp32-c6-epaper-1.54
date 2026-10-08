@@ -1,0 +1,7 @@
+# Board has 16MiB of NOR flash (XM25QH128). The partition table from
+# sdkconfig.base (partitions-4MiBplus.csv) gives everything after the app
+# to the filesystem, so this yields a ~14MiB VFS.
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+
+# Bluetooth is never used (Wi-Fi only, and only for the daily NTP sync).
+CONFIG_BT_ENABLED=n
