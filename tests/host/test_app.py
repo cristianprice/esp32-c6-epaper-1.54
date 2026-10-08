@@ -35,9 +35,18 @@ def utc(y, mo, d, h=0, mi=0, s=0):
     return mptime.mktime((y, mo, d, h, mi, s, 0, 0))
 
 
-class TimeZoneTest(unittest.TestCase):
-    def tearDown(self):
+class UtcConfig(unittest.TestCase):
+    """Runs each test with its own time zone settings, restoring config.py's afterwards."""
+
+    def setUp(self):
+        self._tz = config.TZ_OFFSET_MIN, config.DST_RULE
         config.TZ_OFFSET_MIN, config.DST_RULE = 0, None
+
+    def tearDown(self):
+        config.TZ_OFFSET_MIN, config.DST_RULE = self._tz
+
+
+class TimeZoneTest(UtcConfig):
 
     def test_eu(self):
         config.TZ_OFFSET_MIN, config.DST_RULE = 120, "EU"  # EET / EEST
@@ -64,7 +73,7 @@ class TimeZoneTest(unittest.TestCase):
         self.assertEqual(tz.offset_s(utc(2026, 10, 24, 23, 0)), 7200)
 
 
-class NtpPolicyTest(unittest.TestCase):
+class NtpPolicyTest(UtcConfig):
     def state(self, last_day=0, last_try=0):
         st = persist.State()
         st.last_ntp_day, st.last_ntp_try_min = last_day, last_try
@@ -88,6 +97,12 @@ class NtpPolicyTest(unittest.TestCase):
         self.assertFalse(clock.ntp_due(st, now, True))
         st.last_ntp_try_min = now // 60 - 10
         self.assertTrue(clock.ntp_due(st, now, True))
+
+    def test_noon_is_local_time(self):
+        config.TZ_OFFSET_MIN, config.DST_RULE = 120, "EU"  # Romania: EEST in October
+        st = self.state(last_day=20261007)
+        self.assertFalse(clock.ntp_due(st, utc(2026, 10, 8, 8, 58), True))  # 11:58 local
+        self.assertTrue(clock.ntp_due(st, utc(2026, 10, 8, 9, 0), True))  # 12:00 local
 
     def test_invalid_time_syncs_any_hour(self):
         self.assertTrue(clock.ntp_due(self.state(), utc(2000, 1, 1, 3, 0), False))

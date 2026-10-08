@@ -13,8 +13,8 @@ FULL_REFRESH_EVERY: int = 30         # full e-paper refresh every N wakes (30 x 
 
 # --- Time zone ------------------------------------------------------------
 # The PCF85063 RTC keeps UTC; the display shows local time.
-TZ_OFFSET_MIN: int = 0               # standard-time offset from UTC in minutes, e.g. 120 for EET
-DST_RULE: Optional[str] = None       # None, "EU", "US" or "IL"
+TZ_OFFSET_MIN: int = 120             # standard-time offset from UTC in minutes: EET (Romania)
+DST_RULE: Optional[str] = "EU"       # None, "EU", "US" or "IL"; EU = EEST (UTC+3) in summer
 
 # --- NTP: once a day at noon (local), Wi-Fi is off at all other times -----
 NTP_SERVERS: Tuple[str, ...] = ("pool.ntp.org", "time.google.com", "time.cloudflare.com")
