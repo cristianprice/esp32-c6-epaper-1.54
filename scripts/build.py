@@ -20,13 +20,13 @@ import sys
 import time
 
 import idf_env
+import install
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MPY_DIR = os.path.join(ROOT, "third_party", "micropython")
 PORT_DIR = os.path.join(MPY_DIR, "ports", "esp32")
 BOARDS_DIR = os.path.join(ROOT, "firmware", "boards")
 USER_C_MODULES = os.path.join(ROOT, "firmware", "modules", "micropython.cmake")
-MPY_SUBMODULES = ("lib/micropython-lib", "lib/berkeley-db-1.xx")
 DEFAULT_BOARD = "WAVESHARE_C6_EPAPER_154"
 WINDOWS_PATCH = os.path.join(ROOT, "patches", "micropython-windows-build.patch")
 
@@ -38,19 +38,6 @@ def log(msg):
 def run(cmd, **kw):
     print("$ " + " ".join(cmd), flush=True)
     subprocess.run(cmd, check=True, **kw)
-
-
-def ensure_submodules(update):
-    if not update:
-        return
-    log("Submodules")
-    if not os.path.isfile(os.path.join(MPY_DIR, "py", "mpconfig.h")):
-        run(["git", "-C", ROOT, "submodule", "update", "--init", "third_party/micropython"])
-    missing = [m for m in MPY_SUBMODULES if not os.listdir(os.path.join(MPY_DIR, m))]
-    if missing:
-        run(["git", "-C", MPY_DIR, "submodule", "update", "--init", "--depth", "1", *missing])
-    else:
-        print("ok")
 
 
 def apply_windows_patch():
@@ -103,7 +90,9 @@ def main():
     build_dir = os.path.abspath(args.build_dir or os.path.join(ROOT, "build", args.board))
     start = time.time()
 
-    ensure_submodules(not args.no_submodules)
+    if not args.no_submodules:
+        log("Submodules")
+        install.ensure_submodules()
     apply_windows_patch()
 
     log("ESP-IDF")
